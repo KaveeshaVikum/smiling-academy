@@ -16,83 +16,82 @@
             --text-muted: #a1a1aa;
         }
 
-        /* Base Setup */
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--bg-deep); 
-            color: var(--text-main); 
-            overflow-x: hidden; 
-            width: 100%;
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-deep); color: var(--text-main); overflow-x: hidden; width: 100%; }
+
+        /* --- ADVANCED ANIMATIONS --- */
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(40px) scale(0.95); 
+            transition: all 0.9s cubic-bezier(0.17, 0.55, 0.55, 1); 
+        }
+        .reveal.active { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
         }
 
-        /* Reveal Animations */
-        .reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        /* Float Animation for Hero */
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-hero { animation: floating 4s ease-in-out infinite; }
 
-        /* Background Orbs (Hidden on very old phones for performance) */
+        /* Background Orbs */
         .bg-wrapper { position: fixed; inset: 0; z-index: -1; background: var(--bg-deep); overflow: hidden; }
-        .orb { position: absolute; width: 300px; height: 300px; border-radius: 50%; filter: blur(80px); opacity: 0.3; animation: move 20s infinite alternate; }
-        .orb-1 { background: var(--accent-gold); top: -5%; left: -5%; }
-        .orb-2 { background: #7c3aed; bottom: -5%; right: -5%; animation-delay: -5s; }
-        @keyframes move { from { transform: translate(0,0); } to { transform: translate(30px, 30px); } }
+        .orb { position: absolute; width: 400px; height: 400px; border-radius: 50%; filter: blur(100px); opacity: 0.2; animation: move 25s infinite alternate; }
+        .orb-1 { background: var(--accent-gold); top: -10%; left: -5%; }
+        .orb-2 { background: #7c3aed; bottom: -10%; right: -5%; animation-delay: -5s; }
+        @keyframes move { from { transform: translate(0,0); } to { transform: translate(50px, 50px); } }
 
-        /* Glass Utility */
-        .glass { background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 20px; }
+        /* Glass Cards & Hover */
+        .glass { background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 24px; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card:hover { 
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.15);
+            transform: translateY(-12px);
+        }
 
         /* Navigation */
         nav { 
             position: fixed; top: 0; width: 100%; padding: 1rem 5%; 
             display: flex; justify-content: space-between; align-items: center; 
-            z-index: 1000; background: rgba(5, 5, 7, 0.85);
+            z-index: 1000; background: rgba(5, 5, 7, 0.8);
             border-bottom: 1px solid var(--glass-border);
-            transition: transform 0.3s ease;
+            transition: 0.4s;
         }
         nav.nav-hidden { transform: translateY(-100%); }
 
-        .brand { color: white; text-decoration: none; font-weight: 800; font-size: 1.1rem; letter-spacing: 1px; }
+        /* Sections */
+        section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
 
-        /* Hero */
-        .hero { min-height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 100px 20px 40px; }
-        .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 8vw, 5rem); line-height: 1.1; margin-bottom: 15px; }
+        .hero { min-height: 70vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 9vw, 5.5rem); line-height: 1.1; margin-bottom: 20px; }
 
-        /* Search */
-        .search-wrap { padding: 0 20px; }
-        #search { 
-            width: 100%; max-width: 500px; display: block; margin: 0 auto 30px;
-            padding: 15px 25px; border-radius: 50px; background: rgba(255,255,255,0.05);
-            border: 1px solid var(--glass-border); color: white; outline: none; font-size: 1rem;
-        }
-
-        /* Grid */
-        section { padding: 60px 20px; max-width: 1200px; margin: 0 auto; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-
-        /* Video Cards */
-        .card { transition: 0.3s; overflow: hidden; cursor: pointer; }
-        .iframe-container { width: 100%; padding-top: 56.25%; position: relative; background: #000; }
+        /* Video Display */
+        .iframe-container { width: 100%; padding-top: 56.25%; position: relative; background: #000; border-radius: 24px 24px 0 0; overflow: hidden; }
         .iframe-container iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-        .card-content { padding: 20px; }
+        .card-content { padding: 25px; }
 
-        /* Instructor Stack */
-        .teacher-box { display: flex; flex-direction: column; gap: 30px; padding: 30px; }
-        @media (min-width: 768px) { .teacher-box { flex-direction: row; align-items: center; } }
-        .teacher-box img { width: 100%; max-width: 350px; border-radius: 15px; margin: 0 auto; }
-
-        /* Contact Form */
-        .contact-card { max-width: 500px; margin: 0 auto; padding: 30px; text-align: center; }
-        .input-group { width: 100%; padding: 14px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; color: white; font-size: 1rem; }
+        /* Form */
+        .input-group { width: 100%; padding: 16px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; color: white; font-size: 1rem; transition: 0.3s; }
+        .input-group:focus { border-color: var(--accent-gold); background: rgba(255,255,255,0.1); outline: none; }
 
         /* Buttons */
-        .btn { padding: 12px 28px; border-radius: 50px; font-weight: 700; background: var(--accent-gold); color: #000; border: none; text-decoration: none; display: inline-block; cursor: pointer; }
+        .btn { padding: 14px 32px; border-radius: 50px; font-weight: 700; background: var(--accent-gold); color: #000; border: none; text-decoration: none; display: inline-block; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: #fff; transform: scale(1.05); }
 
-        /* Video Overlay - Optimized for Mobile height */
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 10px; }
-        .overlay.active { display: flex; }
-        .player-inner { width: 100%; max-width: 900px; position: relative; }
-        .close-vid { margin-bottom: 10px; background: #ff4757; color: white; border: none; padding: 8px 15px; border-radius: 10px; width: 100%; }
+        /* Overlay */
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.96); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(20px); }
+        .overlay.active { display: flex; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        footer { padding: 40px 20px; text-align: center; font-size: 0.85rem; color: var(--text-muted); opacity: 0.8; }
+        footer { padding: 50px 20px; text-align: center; border-top: 1px solid var(--glass-border); }
+
+        @media (max-width: 768px) { .grid { gap: 20px; } .hero { min-height: 50vh; } }
     </style>
 </head>
 <body>
@@ -100,93 +99,98 @@
     <div class="bg-wrapper"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
 
     <div class="overlay" id="overlay">
-        <div class="player-inner glass" style="padding: 15px;">
-            <button class="close-vid" onclick="closeV()">Close Lesson</button>
-            <div style="padding-top: 56.25%; position: relative; border-radius:10px; overflow:hidden;">
+        <div class="glass" style="width: 100%; max-width: 900px; padding: 20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h3 id="vTitle" style="color:var(--accent-gold);">Lesson Preview</h3>
+                <button onclick="closeV()" style="background:#ff4757; color:white; border:none; padding:10px 20px; border-radius:50px; cursor:pointer;">Close</button>
+            </div>
+            <div style="padding-top: 56.25%; position: relative; border-radius:15px; overflow:hidden; background:#000;">
                 <iframe id="vIframe" src="" style="position:absolute; inset:0; width:100%; height:100%;" allowfullscreen></iframe>
             </div>
         </div>
     </div>
 
     <nav id="navbar">
-        <a href="#" class="brand">SMILING ACADEMY</a>
-        <a href="#contact" class="btn" style="padding: 8px 20px; font-size: 0.8rem;">Enrol</a>
+        <a href="#" style="color:white; text-decoration:none; font-weight:900; font-size:1.3rem;">SMILING ACADEMY</a>
+        <a href="#contact" class="btn" style="padding: 10px 24px; font-size: 0.9rem;">Enrol Now</a>
     </nav>
 
-    <section class="hero reveal">
-        <div>
-            <h1>Master English.<br>Everywhere.</h1>
-            <p style="color:var(--text-muted); margin-top:10px;">Premium learning optimized for your device.</p>
+    <section class="hero float-hero">
+        <div class="reveal">
+            <h1>Master English <br>With Elegance.</h1>
+            <p style="color:var(--text-muted); font-size:1.2rem; max-width:600px; margin: 0 auto;">Premium online education designed for excellence.</p>
         </div>
     </section>
 
-    <div class="search-wrap reveal">
-        <input type="text" id="search" placeholder="Find a lesson..." onkeyup="filter()">
-    </div>
-
-    <section id="recordings" class="reveal">
+    <section id="recordings">
+        <div class="reveal" style="text-align:center;">
+            <input type="text" id="search" placeholder="Search lessons..." onkeyup="filter()" style="width:100%; max-width:500px; padding:18px 25px; border-radius:50px; background:rgba(255,255,255,0.05); border:1px solid var(--glass-border); color:white; outline:none; margin-bottom:50px;">
+        </div>
         <div class="grid" id="grid"></div>
     </section>
 
-    <section id="instructor" class="reveal">
-        <div class="teacher-box glass">
-            <img src="teacher.png" alt="Instructor">
+    <section id="instructor">
+        <div class="glass reveal" style="padding: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; align-items: center;">
+            <img src="teacher.png" alt="Instructor" style="width:100%; border-radius:20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
             <div>
-                <h2 style="font-size:2rem; font-family: 'Cormorant Garamond';">Ms. Hiruni Jayamini</h2>
-                <p style="color:var(--accent-gold); font-weight:600; margin-bottom:10px;">BA (English), MA (Linguistics)</p>
-                <p style="color:var(--text-muted); font-size: 0.95rem;">Building student confidence through expert online education.</p>
+                <h2 style="font-size:2.8rem; font-family: 'Cormorant Garamond';">Ms. Hiruni Jayamini</h2>
+                <p style="color:var(--accent-gold); font-weight:700; font-size:1.1rem; margin-bottom:15px;">BA (English), MA (Linguistics)</p>
+                <p style="color:var(--text-muted); font-size:1.1rem; line-height:1.8;">Combining academic expertise with modern technology to provide an unparalleled learning experience.</p>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="reveal">
-        <div class="contact-card glass">
-            <h2 style="margin-bottom:20px;">Join Classes</h2>
+    <section id="contact">
+        <div class="glass reveal" style="max-width:600px; margin:0 auto; padding:50px; text-align:center;">
+            <h2 style="margin-bottom:30px; font-size:2.5rem;">Join the Academy</h2>
             <form action="https://formspree.io/f/mbdlrbpe" method="POST">
-                <input type="text" name="name" placeholder="Student Name" class="input-group" required>
+                <input type="text" name="name" placeholder="Student Full Name" class="input-group" required>
                 <input type="tel" name="phone" placeholder="WhatsApp Number" class="input-group" required>
-                <button type="submit" class="btn" style="width:100%;">Register Now</button>
+                <button type="submit" class="btn" style="width:100%; padding:18px;">Submit Registration</button>
             </form>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 Smiling Academy. All Rights Reserved.</p>
+        <p style="color:var(--text-muted);">&copy; 2026 Smiling Academy. All Rights Reserved.</p>
     </footer>
 
     <script>
         const videos = [
-            { title: "English Grammar Basics", link: "https://drive.google.com/file/d/1tAjqVlAMl7e0PE-AkyPpVWj03j33Fru6/preview", info: "Grades 6-9" },
-            { title: "Vocabulary Power", link: "", info: "Grades 3-5" }
+            { title: "English Grammar Basics", link: "https://drive.google.com/file/d/1tAjqVlAMl7e0PE-AkyPpVWj03j33Fru6/preview", info: "Grades 6-9 • Session 01" },
+            { title: "Advanced Vocabulary", link: "", info: "O/L Special • Session 04" },
+            { title: "Spoken English Skills", link: "", info: "Intermediate Level" }
         ];
 
         function draw(data) {
             const g = document.getElementById('grid');
-            g.innerHTML = data.map(v => `
-                <div class="card glass" onclick="openV('${v.link}', '${v.title}')">
+            g.innerHTML = data.map((v, index) => `
+                <div class="card glass reveal" style="transition-delay: ${index * 100}ms" onclick="openV('${v.link}', '${v.title}')">
                     <div class="iframe-container"><iframe src="${v.link}" scrolling="no"></iframe></div>
                     <div class="card-content">
-                        <h3 style="font-size:1.1rem; margin-bottom:5px;">${v.title}</h3>
-                        <p style="color:var(--text-muted); font-size:0.8rem;">${v.info}</p>
+                        <h3 style="margin-bottom:8px;">${v.title}</h3>
+                        <p style="color:var(--text-muted); font-size:0.85rem;">${v.info}</p>
                     </div>
                 </div>
             `).join('');
+            // Trigger reveal for newly drawn cards
+            setTimeout(reveal, 100);
         }
 
-        // --- MOBILE NAV HIDE LOGIC ---
+        // --- SCROLL ENGINE ---
         let lastScroll = 0;
         window.addEventListener("scroll", () => {
-            const currentScroll = window.pageYOffset;
             const nav = document.getElementById("navbar");
-            if (currentScroll > lastScroll && currentScroll > 80) nav.classList.add("nav-hidden");
+            const current = window.pageYOffset;
+            if (current > lastScroll && current > 100) nav.classList.add("nav-hidden");
             else nav.classList.remove("nav-hidden");
-            lastScroll = currentScroll;
+            lastScroll = current;
             reveal();
         });
 
         function reveal() {
             document.querySelectorAll(".reveal").forEach(el => {
-                if (el.getBoundingClientRect().top < window.innerHeight - 80) el.classList.add("active");
+                if (el.getBoundingClientRect().top < window.innerHeight - 50) el.classList.add("active");
             });
         }
 
@@ -197,6 +201,7 @@
 
         function openV(l, t) {
             document.getElementById('vIframe').src = l;
+            document.getElementById('vTitle').innerText = t;
             document.getElementById('overlay').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
@@ -207,8 +212,9 @@
             document.body.style.overflow = 'auto';
         }
 
+        // Initialize
         draw(videos);
-        reveal();
+        window.onload = reveal;
     </script>
 </body>
 </html>
