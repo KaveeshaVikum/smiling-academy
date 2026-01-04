@@ -39,7 +39,8 @@
 
         .glass { background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 24px; }
         
-        .card { cursor: pointer; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; height: 100%; border: 1px solid var(--glass-border); border-radius: 24px; }
+        /* CARD STYLES */
+        .card { cursor: pointer; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; height: 100%; border: 1px solid var(--glass-border); border-radius: 24px; position: relative; }
         .card:hover { 
             background: rgba(255, 255, 255, 0.07);
             border-color: var(--accent-gold);
@@ -63,8 +64,26 @@
         .hero { min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; }
         .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 8vw, 5.5rem); line-height: 1; margin-bottom: 20px; letter-spacing: -1px; }
 
-        .iframe-container { width: 100%; padding-top: 56.25%; position: relative; background: #000; border-bottom: 1px solid var(--glass-border); display: flex; align-items: center; justify-content: center; overflow: hidden;}
-        .iframe-container::after { content: 'WATCH LESSON'; font-size: 0.7rem; letter-spacing: 2px; color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 8px 16px; border-radius: 4px; position: absolute; z-index: 1; }
+        /* NEW VIDEO PREVIEW CONTAINER */
+        .iframe-container { 
+            width: 100%; 
+            padding-top: 56.25%; 
+            position: relative; 
+            background: #000; 
+            border-bottom: 1px solid var(--glass-border); 
+            overflow: hidden;
+        }
+        .iframe-container iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 0;
+            pointer-events: none; /* Student must click card to open full player */
+        }
+        .card-click-trigger {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 5;
+        }
         
         .card-content { padding: 25px; }
 
@@ -178,7 +197,6 @@
 
         let videoList = [];
 
-        // Fetch and Initialize from CSV
         function init() {
             Papa.parse(SHEET_URL, {
                 download: true,
@@ -191,7 +209,7 @@
             });
         }
 
-        // --- Render Lesson Cards ---
+        // UPDATED DRAW FUNCTION WITH PREVIEW
         function draw(data) {
             const g = document.getElementById('grid');
             if(data.length === 0) {
@@ -199,8 +217,11 @@
                 return;
             }
             g.innerHTML = data.map(v => `
-                <div class="card glass reveal active" onclick="openV('${v.link}', '${v.title}')">
-                    <div class="iframe-container"></div>
+                <div class="card glass reveal active">
+                    <div class="card-click-trigger" onclick="openV('${v.link}', '${v.title}')"></div>
+                    <div class="iframe-container">
+                        <iframe src="${v.link}"></iframe>
+                    </div>
                     <div class="card-content">
                         <h3 style="margin-bottom:8px; font-family:'Cormorant Garamond'; font-size:1.4rem;">${v.title}</h3>
                         <p style="color:var(--text-muted); font-size:0.85rem; letter-spacing:1px;">${v.info || 'Academic Session'}</p>
@@ -211,7 +232,6 @@
             setTimeout(handleScroll, 100);
         }
 
-        // --- Video Player Overlay ---
         function openV(url, title) {
             let finalUrl = url.includes('/view') ? url.replace('/view', '/preview') : url;
             document.getElementById('vIframe').src = finalUrl;
@@ -226,7 +246,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // --- Search/Filter Logic ---
         function filter() {
             const q = document.getElementById('search').value.toLowerCase();
             const filtered = videoList.filter(v => 
@@ -235,20 +254,18 @@
             draw(filtered);
         }
 
-        // --- Registration Form Submission ---
-        document.getElementById('enrolForm').addEventListener('submit', async (e) => {
+        // Form Submission Logic
+        document.getElementById('enrolForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
             btn.disabled = true;
             btn.innerText = "Processing...";
-
             try {
                 const response = await fetch(e.target.action, {
                     method: 'POST',
                     body: new FormData(e.target),
                     headers: { 'Accept': 'application/json' }
                 });
-
                 if (response.ok) {
                     e.target.reset();
                     document.getElementById('successOverlay').classList.add('active');
