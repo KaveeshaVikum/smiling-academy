@@ -40,19 +40,21 @@
         .glass { background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 24px; }
         
         /* CARD STYLES */
-        .card { cursor: pointer; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; height: 100%; border: 1px solid var(--glass-border); border-radius: 24px; position: relative; }
+        .card { cursor: pointer; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; height: 100%; border: 1px solid var(--glass-border); border-radius: 24px; position: relative; background: rgba(255,255,255,0.02); }
         .card:hover { 
             background: rgba(255, 255, 255, 0.07);
             border-color: var(--accent-gold);
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(251, 191, 36, 0.15);
         }
+        .card:hover h3 { color: var(--accent-gold); }
 
         nav { 
             position: fixed; top: 0; width: 100%; padding: 1.2rem 5%; 
             display: flex; justify-content: space-between; align-items: center; 
             z-index: 1000; background: rgba(5, 5, 7, 0.8);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--glass-border);
             transition: 0.4s;
         }
@@ -61,10 +63,9 @@
         section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
 
-        .hero { min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 8vw, 5.5rem); line-height: 1; margin-bottom: 20px; letter-spacing: -1px; }
+        .hero { min-height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 8vw, 5.5rem); line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px; }
 
-        /* NEW VIDEO PREVIEW CONTAINER */
         .iframe-container { 
             width: 100%; 
             padding-top: 56.25%; 
@@ -77,7 +78,7 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             border: 0;
-            pointer-events: none; /* Student must click card to open full player */
+            pointer-events: none; 
         }
         .card-click-trigger {
             position: absolute;
@@ -90,7 +91,7 @@
         .input-group { width: 100%; padding: 16px 20px; margin-bottom: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; color: white; font-size: 1rem; transition: 0.3s; outline: none; }
         .input-group:focus { border-color: var(--accent-gold); background: rgba(255,255,255,0.08); }
 
-        .btn { padding: 14px 32px; border-radius: 50px; font-weight: 700; background: var(--accent-gold); color: #000; border: none; text-decoration: none; display: inline-block; cursor: pointer; transition: 0.3s; text-align: center;}
+        .btn { padding: 14px 32px; border-radius: 50px; font-weight: 700; background: var(--accent-gold); color: #000; border: none; text-decoration: none; display: inline-block; cursor: pointer; transition: 0.3s; text-align: center; font-size: 0.95rem; }
         .btn:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(251, 191, 36, 0.2); }
 
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(15px); }
@@ -98,7 +99,7 @@
 
         #loader { text-align: center; color: var(--accent-gold); padding: 50px; font-size: 1.2rem; }
 
-        @media (max-width: 768px) { section { padding: 60px 15px; } .hero { min-height: 60vh; } }
+        @media (max-width: 768px) { section { padding: 60px 15px; } .hero { min-height: 70vh; } }
     </style>
 </head>
 <body>
@@ -121,8 +122,8 @@
         <div class="glass" style="max-width: 450px; width: 100%; padding: 40px; text-align: center;">
             <div style="font-size: 3rem; margin-bottom: 20px;">✨</div>
             <h2 style="font-family:'Cormorant Garamond'; font-size: 2rem; margin-bottom: 10px; color: var(--accent-gold);">Registration Sent!</h2>
-            <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 25px;">Ms. Hiruni's team will reach out to you via WhatsApp shortly.</p>
-            <button onclick="closeSuccess()" class="btn" style="width: 100%;">Got it</button>
+            <p style="color: var(--text-muted); line-height: 1.6; margin-bottom: 25px;">Connecting you with Ms. Hiruni's team on WhatsApp...</p>
+            <div id="countdown" style="font-weight: bold; color: var(--accent-gold); font-size: 1.1rem; letter-spacing: 1px;">Redirecting in 3s...</div>
         </div>
     </div>
 
@@ -143,7 +144,7 @@
     <section id="recordings">
         <div class="reveal active" style="text-align:center; margin-bottom: 50px;">
             <h2 style="font-family:'Cormorant Garamond'; font-size: 2.5rem; margin-bottom: 20px;">Lesson Archive</h2>
-            <input type="text" id="search" placeholder="Search topics (e.g. Grammar, O/L)..." onkeyup="filter()" style="width:100%; max-width:500px; padding:18px 30px; border-radius:50px; background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); color:white; outline:none; text-align:center;">
+            <input type="text" id="search" placeholder="Search topics (e.g. Grammar, O/L)..." onkeyup="filter()" style="width:100%; max-width:500px; padding:18px 30px; border-radius:50px; background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); color:white; outline:none; text-align:center; transition: 0.3s;">
         </div>
         
         <div id="loader">Syncing Academy Database...</div>
@@ -153,16 +154,16 @@
     <section id="instructor">
         <div class="glass reveal" style="padding: 50px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; align-items: center;">
             <div style="position: relative;">
-                <img src="teacher.png" alt="Ms. Hiruni Jayamini" style="width:100%; border-radius:20px;" loading="lazy">
-                <div style="position: absolute; bottom: -20px; right: -20px; background: var(--accent-gold); color: black; padding: 15px 25px; border-radius: 15px; font-weight: 800;">10+ Years Exp</div>
+                <img src="teacher.png" alt="Ms. Hiruni Jayamini" style="width:100%; border-radius:20px; background: #111;" loading="lazy">
+                <div style="position: absolute; bottom: -20px; right: -20px; background: var(--accent-gold); color: black; padding: 15px 25px; border-radius: 15px; font-weight: 800; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">3+ Years Exp</div>
             </div>
             <div>
                 <h2 style="font-size:3rem; font-family: 'Cormorant Garamond'; margin-bottom: 10px;">Ms. Hiruni Jayamini</h2>
                 <p style="color:var(--accent-gold); font-weight:700; font-size:1.1rem; margin-bottom:20px;">BA (English), MA (Linguistics)</p>
                 <p style="color:var(--text-muted); font-size:1.1rem; line-height:1.8; margin-bottom: 25px;">Specializing in academic English and professional communication, Ms. Hiruni combines traditional pedagogy with modern tech to ensure every student finds their voice.</p>
                 <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                    <div class="glass" style="padding: 10px 20px; font-size: 0.9rem;">✓ IELTS Specialist</div>
-                    <div class="glass" style="padding: 10px 20px; font-size: 0.9rem;">✓ O/L & A/L Expert</div>
+                    <div class="glass" style="padding: 10px 20px; font-size: 0.9rem; border-radius: 12px;">✓ IELTS Specialist</div>
+                    <div class="glass" style="padding: 10px 20px; font-size: 0.9rem; border-radius: 12px;">✓ O/L & A/L Expert</div>
                 </div>
             </div>
         </div>
@@ -171,22 +172,23 @@
     <section id="contact">
         <div class="glass reveal" style="max-width:650px; margin:0 auto; padding:60px 40px; text-align:center;">
             <h2 style="margin-bottom:15px; font-size:2.5rem; font-family:'Cormorant Garamond';">Begin Your Journey</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">Fill the form below to receive class details via WhatsApp.</p>
             <form id="enrolForm" action="https://formspree.io/f/mbdlrbpe" method="POST">
                 <input type="text" name="name" placeholder="Full Name" class="input-group" required>
                 <input type="tel" name="phone" placeholder="WhatsApp Number" class="input-group" required>
-                <select name="grade" class="input-group" required style="background-color:#050507">
+                <select name="grade" class="input-group" required style="background-color:#050507; cursor: pointer;">
                     <option value="" disabled selected>Select Grade/Level</option>
-                    <option value="grade6-9">Grade 6 - 9</option>
-                    <option value="ol">O/L Batch</option>
-                    <option value="al">A/L Batch</option>
-                    <option value="spoken">Spoken English</option>
+                    <option value="Grade 6-9">Grade 6 - 9</option>
+                    <option value="O/L Batch">O/L Batch</option>
+                    <option value="A/L Batch">A/L Batch</option>
+                    <option value="Spoken English">Spoken English</option>
                 </select>
                 <button type="submit" id="submitBtn" class="btn" style="width:100%; padding:20px; margin-top: 10px;">Submit Registration</button>
             </form>
         </div>
     </section>
 
-    <footer style="text-align: center; padding: 40px 20px; border-top: 1px solid var(--glass-border); margin-top: 50px;">
+    <footer style="text-align: center; padding: 60px 20px; border-top: 1px solid var(--glass-border); margin-top: 50px;">
         <p style="color:var(--text-main); font-weight: 600; margin-bottom: 10px; letter-spacing: 2px;">SMILING ACADEMY</p>
         <p style="color:var(--text-muted); font-size: 0.9rem;">&copy; 2026 Smiling Academy Education. All Rights Reserved.</p>
     </footer>
@@ -196,6 +198,7 @@
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7MCA0mlmbTvJKUAH-pzIPrIE4dCs8jhWyuXf21dp66TJD1ahslR6lqydveNu8vwBibOyxIf78Fqgz/pub?output=csv';
 
         let videoList = [];
+        let lastScroll = 0;
 
         function init() {
             Papa.parse(SHEET_URL, {
@@ -209,25 +212,26 @@
             });
         }
 
-        // UPDATED DRAW FUNCTION WITH PREVIEW
         function draw(data) {
             const g = document.getElementById('grid');
             if(data.length === 0) {
                 g.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--text-muted); padding: 40px;">No lessons found.</p>`;
                 return;
             }
-            g.innerHTML = data.map(v => `
-                <div class="card glass reveal active">
+            g.innerHTML = data.map(v => {
+                let thumbUrl = v.link.includes('/view') ? v.link.replace('/view', '/preview') : v.link;
+                return `
+                <div class="card reveal active">
                     <div class="card-click-trigger" onclick="openV('${v.link}', '${v.title}')"></div>
                     <div class="iframe-container">
-                        <iframe src="${v.link}"></iframe>
+                        <iframe src="${thumbUrl}" loading="lazy"></iframe>
                     </div>
                     <div class="card-content">
-                        <h3 style="margin-bottom:8px; font-family:'Cormorant Garamond'; font-size:1.4rem;">${v.title}</h3>
+                        <h3 style="margin-bottom:8px; font-family:'Cormorant Garamond'; font-size:1.4rem; transition: 0.3s;">${v.title}</h3>
                         <p style="color:var(--text-muted); font-size:0.85rem; letter-spacing:1px;">${v.info || 'Academic Session'}</p>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
             
             setTimeout(handleScroll, 100);
         }
@@ -254,32 +258,51 @@
             draw(filtered);
         }
 
-        // Form Submission Logic
+        // --- FORM SUBMISSION & WHATSAPP REDIRECT ---
         document.getElementById('enrolForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('submitBtn');
+            const formData = new FormData(e.target);
+            
+            const name = formData.get('name');
+            const grade = formData.get('grade');
+            const phone = formData.get('phone');
+            
             btn.disabled = true;
             btn.innerText = "Processing...";
+
             try {
                 const response = await fetch(e.target.action, {
                     method: 'POST',
-                    body: new FormData(e.target),
+                    body: formData,
                     headers: { 'Accept': 'application/json' }
                 });
+
                 if (response.ok) {
+                    const whatsappNumber = "94778459039"; 
+                    const message = `Hello Smiling Academy! I just registered online via the website.%0A%0A*Student Name:* ${name}%0A*Level:* ${grade}%0A*WhatsApp:* ${phone}%0A%0AI would like to receive more information about the upcoming lessons.`;
+                    const waLink = `https://wa.me/${whatsappNumber}?text=${message}`;
+
                     e.target.reset();
                     document.getElementById('successOverlay').classList.add('active');
                     document.body.style.overflow = 'hidden';
-                }
-            } catch (err) { alert("Error connecting. Please try again."); }
-            btn.disabled = false;
-            btn.innerText = "Submit Registration";
-        });
 
-        function closeSuccess() {
-            document.getElementById('successOverlay').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+                    let count = 3;
+                    const timer = setInterval(() => {
+                        count--;
+                        document.getElementById('countdown').innerText = `Redirecting in ${count}s...`;
+                        if(count <= 0) {
+                            clearInterval(timer);
+                            window.location.href = waLink;
+                        }
+                    }, 1000);
+                }
+            } catch (err) { 
+                alert("Error connecting. Please try again."); 
+                btn.disabled = false;
+                btn.innerText = "Submit Registration";
+            }
+        });
 
         function handleScroll() {
             document.querySelectorAll('.reveal').forEach(el => {
@@ -294,7 +317,6 @@
             lastScroll = current;
         }
 
-        let lastScroll = 0;
         window.addEventListener("scroll", handleScroll);
         window.onload = init;
     </script>
